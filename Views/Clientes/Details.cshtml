@@ -1,0 +1,86 @@
+﻿@model ClientReportManager.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalle del cliente";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Detalle del cliente</h1>
+            <p class="page-subtitle">
+                Información registrada del cliente seleccionado.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.IdCliente" class="btn btn-primary">
+                Editar
+            </a>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Volver
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="text-muted small">Nombre completo</label>
+                    <div class="fw-semibold">@Model.NombreCompleto</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small">Identificación</label>
+                    <div class="fw-semibold">@Model.Identificacion</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small">Correo electrónico</label>
+                    <div>@Model.Correo</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small">Teléfono</label>
+                    <div>@Model.Telefono</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small">Empresa</label>
+                    <div>@Model.Empresa</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-muted small">Tipo</label>
+                    <div>@Model.TipoCliente?.Nombre</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-muted small">Estado</label>
+                    <div>@Model.EstadoCliente?.Nombre</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="text-muted small">Fecha de registro</label>
+                    <div>@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="text-muted small">Observaciones</label>
+                    <div class="border rounded p-3 bg-light">
+                        @if (string.IsNullOrWhiteSpace(Model.Observaciones))
+                        {
+                            <span class="text-muted">Sin observaciones registradas.</span>
+                        }
+                        else
+                        {
+                            @Model.Observaciones
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

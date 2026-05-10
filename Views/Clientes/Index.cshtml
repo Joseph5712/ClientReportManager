@@ -1,0 +1,203 @@
+﻿@using ClientReportManager.ViewModel
+@model ClienteFiltroViewModel
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Clientes</h1>
+            <p class="page-subtitle">
+                Consulta y administración de clientes registrados.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Nuevo cliente
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card filter-card mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label">Buscar</label>
+                    <input type="text"
+                           name="buscar"
+                           value="@Model.Buscar"
+                           class="form-control"
+                           placeholder="Nombre, identificación, correo, teléfono o empresa" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select name="idEstadoCliente" class="form-select">
+                        <option value="">Todos</option>
+
+                        @foreach (var estado in Model.EstadosCliente)
+                        {
+                            @if (Model.IdEstadoCliente == estado.IdEstadoCliente)
+                            {
+                                <option value="@estado.IdEstadoCliente" selected>
+                                    @estado.Nombre
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@estado.IdEstadoCliente">
+                                    @estado.Nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo</label>
+                    <select name="idTipoCliente" class="form-select">
+                        <option value="">Todos</option>
+
+                        @foreach (var tipo in Model.TiposCliente)
+                        {
+                            @if (Model.IdTipoCliente == tipo.IdTipoCliente)
+                            {
+                                <option value="@tipo.IdTipoCliente" selected>
+                                    @tipo.Nombre
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@tipo.IdTipoCliente">
+                                    @tipo.Nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @if (!Model.Clientes.Any())
+            {
+                <div class="empty-state">
+                    <div class="empty-state-title">No se encontraron clientes</div>
+                    <p class="empty-state-text">
+                        Ajuste los filtros o registre un nuevo cliente.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Identificación</th>
+                                <th>Contacto</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Fecha registro</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var cliente in Model.Clientes)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@cliente.NombreCompleto</strong>
+                                        <div class="text-muted small">@cliente.Empresa</div>
+                                    </td>
+
+                                    <td>@cliente.Identificacion</td>
+
+                                    <td>
+                                        <div>@cliente.Correo</div>
+                                        <div class="text-muted small">@cliente.Telefono</div>
+                                    </td>
+
+                                    <td>
+                                        @if (cliente.IdTipoCliente == 1)
+                                        {
+                                            <span class="badge bg-success">Individual</span>
+                                        }
+                                        else if (cliente.IdTipoCliente == 2)
+                                        {
+                                            <span class="badge bg-success">Empresa</span>
+                                        }
+                                        else if (cliente.IdTipoCliente == 3)
+                                        {
+                                            <span class="badge bg-success">Proveedor</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Corporativo</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (cliente.IdEstadoCliente == 1)
+                                        {
+                                            <span class="badge bg-success">Activo</span>
+                                        }
+                                        else if (cliente.IdEstadoCliente == 2)
+                                        {
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info text-dark">Potencial</span>
+                                        }
+                                    </td>
+
+                                    <td>@cliente.FechaRegistro.ToString("dd/MM/yyyy")</td>
+
+                                    <td class="text-end">
+                                        <a asp-action="Details"
+                                           asp-route-id="@cliente.IdCliente"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            Ver
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@cliente.IdCliente"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Editar
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@cliente.IdCliente"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Desactivar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

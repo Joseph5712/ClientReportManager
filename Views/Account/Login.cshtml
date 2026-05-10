@@ -1,0 +1,90 @@
+﻿@model ClientReportManager.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Iniciar sesión - ClientReportManager</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body class="login-page">
+    <main class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-5 col-lg-4">
+                <div class="card border-0 shadow-sm login-card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <h1 class="h4 mb-1">ClientReportManager</h1>
+                            <p class="text-muted mb-0">
+                                Ingrese sus credenciales para continuar.
+                            </p>
+                        </div>
+
+                        <form asp-action="Login" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" asp-for="ReturnUrl" />
+
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger">
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                </div>
+                            }
+
+                            <div class="mb-3">
+                                <label asp-for="NombreUsuario" class="form-label">Usuario</label>
+                                <input asp-for="NombreUsuario"
+                                       class="form-control"
+                                       autocomplete="username"
+                                       placeholder="Ejemplo: admin" />
+                                <span asp-validation-for="NombreUsuario" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Clave" class="form-label">Contraseña</label>
+                                <input asp-for="Clave"
+                                       class="form-control"
+                                       autocomplete="current-password"
+                                       placeholder="Ingrese su contraseña" />
+                                <span asp-validation-for="Clave" class="text-danger small"></span>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input asp-for="Recordarme" class="form-check-input" />
+                                <label asp-for="Recordarme" class="form-check-label">
+                                    Recordarme
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Iniciar sesión
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <small class="text-muted">
+                                Usuario de prueba: admin / 123456
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

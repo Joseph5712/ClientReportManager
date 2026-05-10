@@ -1,0 +1,240 @@
+﻿@model ClientReportManager.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var maxEstado = Model.ClientesPorEstado.Any()
+        ? Model.ClientesPorEstado.Max(e => e.Total)
+        : 1;
+
+    var maxTipo = Model.ClientesPorTipo.Any()
+        ? Model.ClientesPorTipo.Max(t => t.Total)
+        : 1;
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">
+                Resumen general de clientes y comportamiento administrativo del sistema.
+            </p>
+        </div>
+
+        <a asp-controller="Clientes" asp-action="Create" class="btn btn-primary">
+            Nuevo cliente
+        </a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm dashboard-card">
+                <div class="card-body">
+                    <span class="text-muted small">Total clientes</span>
+                    <h2 class="mt-2 mb-0">@Model.TotalClientes</h2>
+                    <div class="text-muted small mt-2">Clientes registrados</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm dashboard-card">
+                <div class="card-body">
+                    <span class="text-muted small">Clientes activos</span>
+                    <h2 class="mt-2 mb-0">@Model.ClientesActivos</h2>
+                    <div class="text-muted small mt-2">Disponibles para gestión</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm dashboard-card">
+                <div class="card-body">
+                    <span class="text-muted small">Clientes potenciales</span>
+                    <h2 class="mt-2 mb-0">@Model.ClientesPotenciales</h2>
+                    <div class="text-muted small mt-2">Oportunidades de seguimiento</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm dashboard-card">
+                <div class="card-body">
+                    <span class="text-muted small">Registrados este mes</span>
+                    <h2 class="mt-2 mb-0">@Model.ClientesRegistradosMesActual</h2>
+                    <div class="text-muted small mt-2">Altas del mes actual</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Últimos clientes registrados</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.UltimosClientes.Any())
+                    {
+                        <div class="text-center py-5">
+                            <h6>No hay clientes registrados</h6>
+                            <p class="text-muted mb-0">
+                                Cuando registre clientes, aparecerán en esta sección.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Cliente</th>
+                                        <th>Tipo</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th class="text-end">Acción</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var cliente in Model.UltimosClientes)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@cliente.NombreCompleto</strong>
+                                                <div class="text-muted small">@cliente.Empresa</div>
+                                            </td>
+
+                                            <td>@cliente.IdTipoCliente</td>
+
+
+                                            <td>
+                                                @if (cliente.IdTipoCliente == 1)
+                                                {
+                                                    <span class="badge bg-success">Individual</span>
+                                                }
+                                                else if (cliente.IdTipoCliente == 2)
+                                                {
+                                                    <span class="badge bg-success">Empresa</span>
+                                                }
+                                                else if (cliente.IdTipoCliente == 3)
+                                                {
+                                                    <span class="badge bg-success">Proveedor</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">Corporativo</span>
+                                                }
+                                            </td>
+
+
+
+                                            <td>
+                                                @if (cliente.IdEstadoCliente == 1)
+                                                {
+                                                    <span class="badge bg-success">Activo</span>
+                                                }
+                                                else if (cliente.IdEstadoCliente == 2)
+                                                {
+                                                    <span class="badge bg-secondary">Inactivo</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info text-dark">Potencial</span>
+                                                }
+                                            </td>
+
+                                            <td>@cliente.FechaRegistro.ToString("dd/MM/yyyy")</td>
+
+                                            <td class="text-end">
+                                                <a asp-controller="Clientes"
+                                                   asp-action="Details"
+                                                   asp-route-id="@cliente.IdCliente"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    Ver
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Clientes por estado</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.ClientesPorEstado.Any())
+                    {
+                        <p class="text-muted mb-0">No hay datos disponibles.</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.ClientesPorEstado)
+                        {
+                            var porcentaje = maxEstado == 0 ? 0 : (item.Total * 100) / maxEstado;
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>@item.Estado</span>
+                                    <strong>@item.Total</strong>
+                                </div>
+
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="width: @porcentaje%">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Clientes por tipo</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.ClientesPorTipo.Any())
+                    {
+                        <p class="text-muted mb-0">No hay datos disponibles.</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.ClientesPorTipo)
+                        {
+                            var porcentaje = maxTipo == 0 ? 0 : (item.Total * 100) / maxTipo;
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>@item.Tipo</span>
+                                    <strong>@item.Total</strong>
+                                </div>
+
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="width: @porcentaje%">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

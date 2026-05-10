@@ -1,0 +1,370 @@
+:root {
+    --app-bg: #f5f7fb;
+    --app-sidebar: #111827;
+    --app-sidebar-muted: #9ca3af;
+    --app-primary: #2563eb;
+    --app-primary-soft: #e8f0ff;
+    --app-border: #e5e7eb;
+    --app-text: #111827;
+    --app-muted: #6b7280;
+    --app-card: #ffffff;
+}
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin: 0;
+    color: var(--app-text);
+    background: var(--app-bg);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 270px;
+    height: 100vh;
+    padding: 1.25rem;
+    background: var(--app-sidebar);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.9rem;
+    background: var(--app-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.brand-title {
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.brand-subtitle {
+    font-size: 0.82rem;
+    color: var(--app-sidebar-muted);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.85rem;
+    border-radius: 0.75rem;
+    color: #d1d5db;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+    }
+
+    .sidebar-link.active {
+        background: #ffffff;
+        color: var(--app-sidebar);
+        font-weight: 600;
+    }
+
+.sidebar-link-icon {
+    width: 24px;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--app-sidebar-muted);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-main {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+    min-height: 100vh;
+}
+
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    height: 78px;
+    padding: 1rem 1.5rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--app-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topbar-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.topbar-subtitle {
+    color: var(--app-muted);
+    font-size: 0.85rem;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: var(--app-primary-soft);
+    color: var(--app-primary);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.user-role {
+    font-size: 0.78rem;
+    color: var(--app-muted);
+}
+
+.app-content {
+    padding: 1.5rem;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.card-header {
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.dashboard-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.08) !important;
+    }
+
+.btn {
+    border-radius: 0.65rem;
+    font-weight: 500;
+}
+
+.form-control,
+.form-select {
+    border-radius: 0.65rem;
+    border-color: var(--app-border);
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--app-primary);
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+    }
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+    .table th {
+        font-size: 0.82rem;
+        color: var(--app-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        border-bottom: 1px solid var(--app-border);
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+.badge {
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+}
+
+.alert {
+    border-radius: 0.85rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-state-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.empty-state-text {
+    color: var(--app-muted);
+    margin-bottom: 0;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--app-muted);
+}
+
+.filter-card {
+    border: 0;
+    box-shadow: 0 0.15rem 0.75rem rgba(15, 23, 42, 0.05);
+}
+
+.login-page {
+    background: linear-gradient(135deg, #f5f7fb 0%, #e8f0ff 100%);
+}
+
+.login-card {
+    border-radius: 1rem;
+}
+
+    .login-card .form-control {
+        min-height: 44px;
+    }
+
+    .login-card .btn {
+        min-height: 44px;
+    }
+
+@media (max-width: 991px) {
+    .app-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+
+    .app-shell {
+        flex-direction: column;
+    }
+
+    .app-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .app-topbar {
+        position: static;
+        height: auto;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .topbar-user {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+}
+
+@media (max-width: 575px) {
+    .app-content {
+        padding: 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .topbar-user {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-info {
+        width: 100%;
+    }
+}

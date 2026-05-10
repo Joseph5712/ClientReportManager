@@ -1,0 +1,107 @@
+﻿@model ClientReportManager.Models.Cliente
+
+@{
+    ViewData["Title"] = "Editar cliente";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Editar cliente</h1>
+            <p class="page-subtitle">
+                Actualice la información administrativa del cliente.
+            </p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="IdCliente" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-4">
+                    <h5 class="mb-1">Datos del cliente</h5>
+                        <p class="text-muted mb-0">
+                            Revise la información antes de guardar los cambios.
+                        </p>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="NombreCompleto" class="form-label">Nombre completo</label>
+                        <input asp-for="NombreCompleto" class="form-control" />
+                        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Identificacion" class="form-label">Identificación</label>
+                        <input asp-for="Identificacion" class="form-control" />
+                        <span asp-validation-for="Identificacion" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Correo" class="form-label">Correo electrónico</label>
+                        <input asp-for="Correo" class="form-control" />
+                        <span asp-validation-for="Correo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Telefono" class="form-label">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Empresa" class="form-label">Empresa</label>
+                        <input asp-for="Empresa" class="form-control" />
+                        <span asp-validation-for="Empresa" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="IdTipoCliente" class="form-label">Tipo de cliente</label>
+                        <select asp-for="IdTipoCliente"
+                                asp-items="ViewBag.TiposCliente"
+                                class="form-select">
+                            <option value="0">Seleccione</option>
+                        </select>
+                        <span asp-validation-for="IdTipoCliente" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="IdEstadoCliente" class="form-label">Estado</label>
+                        <select asp-for="IdEstadoCliente"
+                                asp-items="ViewBag.EstadosCliente"
+                                class="form-select">
+                            <option value="0">Seleccione</option>
+                        </select>
+                        <span asp-validation-for="IdEstadoCliente" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Observaciones" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

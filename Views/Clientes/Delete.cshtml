@@ -1,0 +1,62 @@
+﻿@model ClientReportManager.Models.Cliente
+
+@{
+    ViewData["Title"] = "Desactivar cliente";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Desactivar cliente</h1>
+            <p class="page-subtitle">
+                Confirme si desea marcar este cliente como inactivo.
+            </p>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        Esta acción no eliminará el registro de la base de datos. El cliente será marcado como inactivo.
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h5>@Model.NombreCompleto</h5>
+
+            <p class="text-muted mb-4">
+                Identificación: @Model.Identificacion
+            </p>
+
+            <dl class="row">
+                <dt class="col-sm-3">Correo</dt>
+                <dd class="col-sm-9">@Model.Correo</dd>
+
+                <dt class="col-sm-3">Teléfono</dt>
+                <dd class="col-sm-9">@Model.Telefono</dd>
+
+                <dt class="col-sm-3">Tipo</dt>
+                <dd class="col-sm-9">@Model.TipoCliente?.Nombre</dd>
+
+                <dt class="col-sm-3">Estado actual</dt>
+                <dd class="col-sm-9">@Model.EstadoCliente?.Nombre</dd>
+            </dl>
+
+            <form asp-action="DeleteConfirmed" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id" value="@Model.IdCliente" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('¿Desea desactivar este cliente? Esta acción conservará el registro como inactivo.');">
+                        Desactivar cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

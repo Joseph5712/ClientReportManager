@@ -1,0 +1,111 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string IsActive(string controller)
+    {
+        return currentController == controller ? "active" : "";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - ClientReportManager</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">CRM</div>
+
+                <div>
+                    <div class="brand-title">ClientReport</div>
+                    <div class="brand-subtitle">Manager</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a class="sidebar-link @IsActive("Dashboard")"
+                   asp-controller="Dashboard"
+                   asp-action="Index">
+                    <span class="sidebar-link-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="sidebar-link @IsActive("Clientes")"
+                   asp-controller="Clientes"
+                   asp-action="Index">
+                    <span class="sidebar-link-icon">👥</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a class="sidebar-link @IsActive("Reportes")"
+                   asp-controller="Reportes"
+                   asp-action="Clientes">
+                    <span class="sidebar-link-icon">📄</span>
+                    <span>Reportes</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="small text-muted">Sistema administrativo</div>
+                <div class="small fw-semibold">Versión 1.0</div>
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-topbar">
+                <div>
+                    <h2 class="topbar-title">@ViewData["Title"]</h2>
+                    <div class="topbar-subtitle">
+                        Gestión de clientes y reportes administrativos
+                    </div>
+                </div>
+
+                <div class="topbar-user">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                @User.Identity.Name?.Substring(0, 1).ToUpper()
+                            </div>
+
+                            <div class="user-text">
+                                <div class="user-name">
+                                    @User.FindFirst("NombreCompleto")?.Value
+                                </div>
+                                <div class="user-role">
+                                    Usuario autenticado
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="btn btn-outline-secondary btn-sm"
+                           asp-controller="Account"
+                           asp-action="Logout">
+                            Cerrar sesión
+                        </a>
+                    }
+                </div>
+            </header>
+
+            <main class="app-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

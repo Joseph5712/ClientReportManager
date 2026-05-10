@@ -1,0 +1,354 @@
+﻿@model ClientReportManager.ViewModels.ReporteClientesViewModel
+
+@{
+    ViewData["Title"] = "Reporte de clientes";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Reporte de clientes</h1>
+            <p class="page-subtitle">
+                Consulte clientes registrados aplicando filtros administrativos.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="ExportarClientesCsv"
+               asp-route-fechaInicio="@(Model.FechaInicio?.ToString("yyyy-MM-dd"))"
+               asp-route-fechaFin="@(Model.FechaFin?.ToString("yyyy-MM-dd"))"
+               asp-route-idEstadoCliente="@Model.IdEstadoCliente"
+               asp-route-idTipoCliente="@Model.IdTipoCliente"
+               asp-route-buscar="@Model.Buscar"
+               class="btn btn-primary">
+                Exportar CSV
+            </a>
+
+            <a asp-controller="Clientes" asp-action="Index" class="btn btn-outline-secondary">
+                Volver a clientes
+            </a>
+        </div>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <div asp-validation-summary="All"></div>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card filter-card mb-4">
+        <div class="card-body">
+            <form asp-action="Clientes" method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Fecha inicio</label>
+                    <input type="date"
+                           name="fechaInicio"
+                           value="@(Model.FechaInicio?.ToString("yyyy-MM-dd"))"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Fecha fin</label>
+                    <input type="date"
+                           name="fechaFin"
+                           value="@(Model.FechaFin?.ToString("yyyy-MM-dd"))"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select name="idEstadoCliente" class="form-select">
+                        <option value="">Todos</option>
+
+                        @foreach (var estado in Model.EstadosCliente)
+                        {
+                            if (Model.IdEstadoCliente == estado.IdEstadoCliente)
+                            {
+                                <option value="@estado.IdEstadoCliente" selected>
+                                    @estado.Nombre
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@estado.IdEstadoCliente">
+                                    @estado.Nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo</label>
+                    <select name="idTipoCliente" class="form-select">
+                        <option value="">Todos</option>
+
+                        @foreach (var tipo in Model.TiposCliente)
+                        {
+                            if (Model.IdTipoCliente == tipo.IdTipoCliente)
+                            {
+                                <option value="@tipo.IdTipoCliente" selected>
+                                    @tipo.Nombre
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@tipo.IdTipoCliente">
+                                    @tipo.Nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-9">
+                    <label class="form-label">Buscar</label>
+                    <input type="text"
+                           name="buscar"
+                           value="@Model.Buscar"
+                           class="form-control"
+                           placeholder="Nombre, identificación, correo, teléfono o empresa" />
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Generar reporte
+                    </button>
+
+                    <a asp-action="Clientes" class="btn btn-outline-secondary">
+                        Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted small">Total encontrados</span>
+                    <h2 class="mt-2 mb-0">@Model.TotalClientes</h2>
+                    <div class="text-muted small mt-2">
+                        Resultado según filtros aplicados
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted small">Estados incluidos</span>
+                    <h2 class="mt-2 mb-0">@Model.ResumenPorEstado.Count</h2>
+                    <div class="text-muted small mt-2">
+                        Clasificaciones por estado
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted small">Tipos incluidos</span>
+                    <h2 class="mt-2 mb-0">@Model.ResumenPorTipo.Count</h2>
+                    <div class="text-muted small mt-2">
+                        Clasificaciones por tipo
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Resumen por estado</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.ResumenPorEstado.Any())
+                    {
+                        <p class="text-muted mb-0">No hay datos para mostrar.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Estado</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.ResumenPorEstado)
+                                    {
+                                        <tr>
+                                            <td>@item.Nombre</td>
+                                            <td class="text-end fw-semibold">@item.Total</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0">Resumen por tipo</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.ResumenPorTipo.Any())
+                    {
+                        <p class="text-muted mb-0">No hay datos para mostrar.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.ResumenPorTipo)
+                                    {
+                                        <tr>
+                                            <td>@item.Nombre</td>
+                                            <td class="text-end fw-semibold">@item.Total</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Detalle del reporte</h5>
+
+            <span class="text-muted small">
+                @Model.TotalClientes registro(s)
+            </span>
+        </div>
+
+        <div class="card-body">
+            @if (!Model.Clientes.Any())
+            {
+                <div class="empty-state">
+                    <div class="empty-state-title">No se encontraron resultados</div>
+                    <p class="empty-state-text">
+                        Ajuste los filtros para ampliar la búsqueda.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Identificación</th>
+                                <th>Contacto</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Fecha registro</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var cliente in Model.Clientes)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@cliente.NombreCompleto</strong>
+                                        <div class="text-muted small">@cliente.Empresa</div>
+                                    </td>
+
+                                    <td>@cliente.Identificacion</td>
+
+                                    <td>
+                                        <div>@cliente.Correo</div>
+                                        <div class="text-muted small">@cliente.Telefono</div>
+                                    </td>
+
+                                    <td>
+                                        @if (cliente.IdTipoCliente == 1)
+                                        {
+                                            <span class="badge bg-success">Individual</span>
+                                        }
+                                        else if (cliente.IdTipoCliente == 2)
+                                        {
+                                            <span class="badge bg-success">Empresa</span>
+                                        }
+                                        else if (cliente.IdTipoCliente == 3)
+                                        {
+                                            <span class="badge bg-success">Proveedor</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Corporativo</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (cliente.IdEstadoCliente == 1)
+                                        {
+                                            <span class="badge bg-success">Activo</span>
+                                        }
+                                        else if (cliente.IdEstadoCliente == 2)
+                                        {
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info text-dark">Potencial</span>
+                                        }
+                                    </td>
+
+                                    <td>@cliente.FechaRegistro.ToString("dd/MM/yyyy")</td>
+
+                                    <td class="text-end">
+                                        <a asp-controller="Clientes"
+                                           asp-action="Details"
+                                           asp-route-id="@cliente.IdCliente"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
