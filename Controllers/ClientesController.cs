@@ -1,4 +1,4 @@
-﻿using ClientReportManager.Models;
+using ClientReportManager.Models;
 using ClientReportManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -136,6 +136,66 @@ namespace ClientReportManager.Controllers
             }
 
             TempData["SuccessMessage"] = "Cliente desactivado correctamente.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeletePhysical(int id)
+        {
+            var cliente = await _clienteService.ObtenerClientePorIdAsync(id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            if (cliente.IdEstadoCliente != 2)
+            {
+                TempData["ErrorMessage"] = "Solo se pueden eliminar físicamente clientes inactivos.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(cliente);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePhysicalConfirmed(int id)
+        {
+            var cliente = await _clienteService.ObtenerClientePorIdAsync(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            if (cliente.IdEstadoCliente != 2)
+            {
+                TempData["ErrorMessage"] = "Solo se pueden eliminar físicamente clientes inactivos.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var eliminado = await _clienteService.EliminarClienteFisicoAsync(id);
+
+            if (!eliminado)
+            {
+                return NotFound();
+            }
+
+            TempData["SuccessMessage"] = "Cliente eliminado permanentemente de la base de datos.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Activar(int id)
+        {
+            var activado = await _clienteService.ActivarClienteAsync(id);
+
+            if (!activado)
+            {
+                return NotFound();
+            }
+
+            TempData["SuccessMessage"] = "Cliente activado correctamente.";
 
             return RedirectToAction(nameof(Index));
         }

@@ -1,4 +1,4 @@
-﻿@model ClientReportManager.ViewModels.LoginViewModel
+@model ClientReportManager.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Iniciar sesión";
@@ -15,6 +15,13 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body class="login-page">

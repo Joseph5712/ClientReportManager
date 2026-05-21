@@ -1,4 +1,4 @@
-﻿@using ClientReportManager.ViewModel
+@using ClientReportManager.ViewModel
 @model ClienteFiltroViewModel
 
 @{
@@ -23,6 +23,14 @@
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
@@ -186,11 +194,27 @@
                                             Editar
                                         </a>
 
-                                        <a asp-action="Delete"
-                                           asp-route-id="@cliente.IdCliente"
-                                           class="btn btn-sm btn-outline-danger">
-                                            Desactivar
-                                        </a>
+                                        @if (cliente.IdEstadoCliente == 2)
+                                        {
+                                            <a asp-action="Activar"
+                                               asp-route-id="@cliente.IdCliente"
+                                               class="btn btn-sm btn-outline-success">
+                                                Activar
+                                            </a>
+                                            <a asp-action="DeletePhysical"
+                                               asp-route-id="@cliente.IdCliente"
+                                               class="btn btn-sm btn-danger">
+                                                Borrar
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@cliente.IdCliente"
+                                               class="btn btn-sm btn-outline-danger">
+                                                Desactivar
+                                            </a>
+                                        }
                                     </td>
                                 </tr>
                             }
