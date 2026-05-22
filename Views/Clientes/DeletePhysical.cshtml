@@ -1,0 +1,78 @@
+@model ClientReportManager.Models.Cliente
+
+@{
+    ViewData["Title"] = "Eliminar cliente definitivamente";
+}
+
+<div class="container-fluid">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title text-danger">Eliminar cliente definitivamente</h1>
+            <p class="page-subtitle">
+                Confirme si desea eliminar permanentemente este cliente.
+            </p>
+        </div>
+    </div>
+
+    <div class="alert alert-danger shadow-sm d-flex align-items-center gap-3">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+        </div>
+        <div>
+            <strong>¡Atención!</strong> Esta acción es <strong>irreversible</strong> y eliminará por completo el registro del cliente de la base de datos.
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-1 text-dark">@Model.NombreCompleto</h5>
+            <p class="text-muted mb-4">
+                Identificación: <strong>@Model.Identificacion</strong>
+            </p>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-3 text-muted">Correo electrónico</dt>
+                <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Correo) ? "No registrado" : Model.Correo)</dd>
+
+                <dt class="col-sm-3 text-muted">Teléfono</dt>
+                <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Telefono) ? "No registrado" : Model.Telefono)</dd>
+
+                <dt class="col-sm-3 text-muted">Empresa</dt>
+                <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Empresa) ? "No registrada" : Model.Empresa)</dd>
+
+                <dt class="col-sm-3 text-muted">Tipo de cliente</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-success">@Model.TipoCliente?.Nombre</span>
+                </dd>
+
+                <dt class="col-sm-3 text-muted">Estado actual</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-secondary">@Model.EstadoCliente?.Nombre</span>
+                </dd>
+
+                <dt class="col-sm-3 text-muted">Fecha de registro</dt>
+                <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+
+            <form asp-action="DeletePhysicalConfirmed" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id" value="@Model.IdCliente" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar y regresar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger px-4"
+                            onclick="return confirm('¿Está absolutamente seguro de que desea eliminar permanentemente a este cliente? Esta acción borrará el registro de la base de datos.');">
+                        Eliminar permanentemente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

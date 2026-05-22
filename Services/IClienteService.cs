@@ -1,4 +1,4 @@
-﻿using ClientReportManager.Models;
+using ClientReportManager.Models;
 using ClientReportManager.ViewModel;
 
 namespace ClientReportManager.Services
@@ -20,5 +20,9 @@ namespace ClientReportManager.Services
         Task<bool> ActualizarClienteAsync(Cliente cliente);
 
         Task<bool> DesactivarClienteAsync(int id);
+
+        Task<bool> ActivarClienteAsync(int id);
+
+        Task<bool> EliminarClienteFisicoAsync(int id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using ClientReportManager.Data;
+using ClientReportManager.Data;
 using ClientReportManager.Models;
 using ClientReportManager.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -145,6 +145,38 @@ namespace ClientReportManager.Services
             // No se elimina el registro físicamente.
             // Se marca como inactivo para conservar historial y evitar pérdida de información.
             cliente.IdEstadoCliente = 2;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> EliminarClienteFisicoAsync(int id)
+        {
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.IdCliente == id);
+
+            if (cliente == null)
+            {
+                return false;
+            }
+
+            _context.Clientes.Remove(cliente);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ActivarClienteAsync(int id)
+        {
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.IdCliente == id);
+
+            if (cliente == null)
+            {
+                return false;
+            }
+
+            // Cambiar estado a Activo (1)
+            cliente.IdEstadoCliente = 1;
 
             await _context.SaveChangesAsync();
             return true;

@@ -1,4 +1,4 @@
-﻿@{
+@{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
@@ -18,6 +18,13 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -87,6 +94,10 @@
                                 </div>
                             </div>
                         </div>
+
+                        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm me-2 d-flex align-items-center justify-content-center" title="Cambiar tema" style="width: 34px; height: 34px; border-radius: 0.65rem; padding: 0;">
+                            <span id="theme-toggle-icon">🌙</span>
+                        </button>
 
                         <a class="btn btn-outline-secondary btn-sm"
                            asp-controller="Account"

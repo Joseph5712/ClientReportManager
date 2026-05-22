@@ -10,6 +10,18 @@
     --app-card: #ffffff;
 }
 
+[data-theme="dark"] {
+    --app-bg: #0f172a;
+    --app-sidebar: #0b0f19;
+    --app-sidebar-muted: #475569;
+    --app-primary: #3b82f6;
+    --app-primary-soft: rgba(59, 130, 246, 0.12);
+    --app-border: #1e293b;
+    --app-text: #f1f5f9;
+    --app-muted: #94a3b8;
+    --app-card: #1e293b;
+}
+
 html {
     font-size: 14px;
 }
@@ -133,7 +145,7 @@ a {
     z-index: 900;
     height: 78px;
     padding: 1rem 1.5rem;
-    background: #ffffff;
+    background: var(--app-card);
     border-bottom: 1px solid var(--app-border);
     display: flex;
     align-items: center;
@@ -367,4 +379,93 @@ a {
     .user-info {
         width: 100%;
     }
+}
+
+/* Estilos adicionales para soportar Modo Oscuro */
+[data-theme="dark"] body {
+    background-color: var(--app-bg);
+    color: var(--app-text);
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--app-card);
+    border-color: var(--app-border);
+    color: var(--app-text);
+}
+
+[data-theme="dark"] .card-header,
+[data-theme="dark"] .card-footer {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-color: var(--app-border);
+    color: var(--app-text);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: #131b2e;
+    color: var(--app-text);
+    border-color: var(--app-border);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: #475569;
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: #131b2e;
+    color: var(--app-text);
+    border-color: var(--app-primary);
+}
+
+[data-theme="dark"] .form-label {
+    color: var(--app-text);
+}
+
+[data-theme="dark"] .table {
+    color: var(--app-text);
+}
+
+[data-theme="dark"] .table th {
+    border-color: var(--app-border);
+}
+
+[data-theme="dark"] .table td {
+    border-color: var(--app-border);
+}
+
+[data-theme="dark"] .table-hover tbody tr:hover {
+    color: var(--app-text);
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--app-muted) !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: var(--app-text) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--app-card) !important;
+}
+
+[data-theme="dark"] .login-page {
+    background: linear-gradient(135deg, #0b0f19 0%, #0f172a 100%) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    color: var(--app-muted);
+    border-color: var(--app-border);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    color: #ffffff;
+    background-color: var(--app-border);
+    border-color: var(--app-border);
+}
+
+[data-theme="dark"] .empty-state-text {
+    color: var(--app-muted);
 }
